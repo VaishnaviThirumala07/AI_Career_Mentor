@@ -1,0 +1,7 @@
+# .streamlit/config.toml
+[theme]
+primaryColor = "#00D4FF"   # Neon Blue for buttons/highlights
+backgroundColor = "#0E1117" # Deep dark background
+secondaryBackgroundColor = "#161B22" # Slightly lighter for sidebar/inputs
+textColor = "#FAFAFA"      # Crisp white text
+font = "sans serif"        # Modern font
