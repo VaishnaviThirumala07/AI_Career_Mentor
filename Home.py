@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 
 # ------------------------------------------------------------
 # 1. Page Config (Must be first)
@@ -12,7 +11,7 @@ st.set_page_config(
 )
 
 # ------------------------------------------------------------
-# 2. Custom CSS (The "Complex" Look)
+# 2. Custom CSS (The Modern Look)
 # ------------------------------------------------------------
 def inject_css():
     st.markdown(
@@ -107,33 +106,14 @@ def inject_css():
 inject_css()
 
 # ------------------------------------------------------------
-# 3. Sidebar (Global Uploader + Info)
+# 3. Sidebar (Clean - No Uploader)
 # ------------------------------------------------------------
 st.sidebar.title("AI Career Mentor")
 st.sidebar.markdown("---")
+st.sidebar.info("👈 **Navigate** using the menu above to access the tools.")
+st.sidebar.markdown("---")
+st.sidebar.caption("Powered by Google Gemini AI")
 
-# Global Session State for Resume
-if "resume_uploaded" not in st.session_state:
-    st.session_state["resume_uploaded"] = False
-    st.session_state["resume_name"] = ""
-    st.session_state["resume_bytes"] = None
-
-# Sidebar Uploader (Persists across pages)
-st.sidebar.subheader("📂 Document Context")
-with st.sidebar.expander("Upload Resume (PDF/TXT)", expanded=True):
-    uploaded_resume = st.file_uploader("Select file", type=["pdf", "txt"], key="sidebar_resume")
-    
-    if uploaded_resume:
-        try:
-            file_bytes = uploaded_resume.read()
-            st.session_state["resume_uploaded"] = True
-            st.session_state["resume_name"] = uploaded_resume.name
-            st.session_state["resume_bytes"] = file_bytes
-            st.success(f"Loaded: {uploaded_resume.name}")
-        except Exception as e:
-            st.error("Error reading file")
-
-st.sidebar.info("👈 **Navigate** using the sidebar menu above.")
 
 # ------------------------------------------------------------
 # 4. Helper Function: Render HTML Card
@@ -161,7 +141,7 @@ col1, col2 = st.columns([3, 1], gap="large")
 with col1:
     st.markdown('<div class="hero">', unsafe_allow_html=True)
     st.markdown('<div><h1 class="title">AI Career Mentor <span class="brand-accent">Platform</span></h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">Personalized career roadmaps, resume optimization, and mock interviews powered by Google Gemini AI.</p></div>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Personalized career roadmaps, resume optimization, and mock interviews powered by Generative AI.</p></div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Metrics Section
@@ -171,13 +151,13 @@ with col1:
     m3.metric("Interview Engine", "Ready", "Context Aware")
 
 with col2:
-    # "Instant Demo" or "Status" Card
+    # "Status" Card
     st.markdown("""
     <div class="card" style="text-align: center; border-color: #3B82F6;">
-        <h4 style="color: #60A5FA;">🚀 Get Started</h4>
-        <p style="margin-bottom: 10px;">Select a tool from the sidebar to begin your journey.</p>
+        <h4 style="color: #60A5FA;">🚀 Ready</h4>
+        <p style="margin-bottom: 10px;">Select a tool from the sidebar to begin.</p>
         <div style="font-size: 0.8rem; color: #64748b;">
-            Current Mode: <strong>Production</strong>
+            Version: <strong>MVP 1.0</strong>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -211,4 +191,4 @@ with c3:
 
 # Footer
 st.markdown("---")
-st.markdown('<div style="text-align: center; color: #475569; font-size: 0.8rem;">Powered by Google Gemini • Built with Streamlit</div>', unsafe_allow_html=True)
+st.markdown('<div style="text-align: center; color: #475569; font-size: 0.8rem;">Powered by Gemini AI • Built with Streamlit</div>', unsafe_allow_html=True)
