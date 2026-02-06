@@ -49,3 +49,12 @@ Fully redesigned Streamlit interface
 Sidebar navigation
 Custom CSS for a dark-themed modern UI
 Smooth card-based layout and interactive elements
+
+Note : Environment Variable Required
+
+This app requires a Gemini API key.
+Create a `.env` file:
+GEMINI_API_KEY=your_api_key_here
+
+Then run:
+docker run -p 8501:8501 --env-file .env yourusername/career-mentor
