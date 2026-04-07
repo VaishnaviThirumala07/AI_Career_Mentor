@@ -7,14 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Use the model you found successfully in your test_brain.py
-MODEL_NAME = 'gemini-1.5-flash' 
-model = genai.GenerativeModel(MODEL_NAME)
+# Using 1.5 Pro for significantly better reasoning and rule-following
+MODEL_NAME = 'gemini-1.5-pro' 
 
 st.title("🤖 AI Mock Interviewer")
 
-# 2. Session State (The AI's Memory)
-# This keeps the chat history alive even when you click buttons
+# 2. Session State
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -26,10 +24,10 @@ with st.sidebar:
     difficulty = st.select_slider("Difficulty", options=["Junior", "Mid-Level", "Senior"])
     
     if st.button("Start New Interview"):
-        # Reset memory
         st.session_state.messages = []
-        # Initial System Prompt to set the persona
-        initial_prompt = f"""
+        
+        # System Prompt - Now passed as a permanent instruction
+        system_instruction = f"""
         You are an expert Technical Interviewer for a {difficulty} {role} position. 
         Focus heavily on {topic}.
         
@@ -41,10 +39,14 @@ with st.sidebar:
         
         Start by introducing yourself and asking the first question.
         """
+        
         try:
-            # Send first message to AI to kickstart the chat
-            response = model.generate_content(initial_prompt)
+            # Initialize model with SYSTEM INSTRUCTIONS
+            model = genai.GenerativeModel(MODEL_NAME, system_instruction=system_instruction)
+            response = model.generate_content("Begin the interview by introducing yourself.")
             st.session_state.messages.append({"role": "assistant", "content": response.text})
+            # Save the system instruction in session state for the chat loop
+            st.session_state.system_instruction = system_instruction
         except Exception as e:
             st.error(f"Error starting interview: {e}")
 
@@ -62,19 +64,24 @@ if user_answer := st.chat_input("Type your answer here..."):
 
     # B. Generate AI Response
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            # Construct the full chat history for context
-            # We join previous messages so the AI knows what's going on
-            chat_history = [
-                {"role": "user" if msg["role"] == "user" else "model", "parts": [msg["content"]]}
-                for msg in st.session_state.messages
-            ]
-            
-            # Start a chat session with history
-            chat = model.start_chat(history=chat_history[:-1]) # Load all except last (which is the new input)
-            response = chat.send_message(user_answer)
-            
-            st.write(response.text)
-            
-    # C. Save AI Response to memory
-    st.session_state.messages.append({"role": "assistant", "content": response.text})
+        with st.spinner("Analyzing and preparing next question..."):
+            try:
+                # Re-initialize model with the same system instruction
+                current_instruction = st.session_state.get("system_instruction", "You are a career interviewer.")
+                model = genai.GenerativeModel(MODEL_NAME, system_instruction=current_instruction)
+                
+                # Format history for Gemini (exclude current user answer which is sent via send_message)
+                chat_history = [
+                    {"role": "user" if msg["role"] == "user" else "model", "parts": [msg["content"]]}
+                    for msg in st.session_state.messages[:-1]
+                ]
+                
+                chat = model.start_chat(history=chat_history)
+                response = chat.send_message(user_answer)
+                
+                st.write(response.text)
+                
+                # C. Save AI Response to memory
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+            except Exception as e:
+                st.error(f"Error generating response: {e}")
