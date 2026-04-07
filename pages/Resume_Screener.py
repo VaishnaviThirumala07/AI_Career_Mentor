@@ -10,7 +10,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Use the model that worked for you in previous steps
-MODEL_NAME = 'gemini-1.5-flash' 
+MODEL_NAME = 'gemini-2.5-flash' 
 model = genai.GenerativeModel(MODEL_NAME)
 
 # 2. Helper Function to Process the Uploaded PDF

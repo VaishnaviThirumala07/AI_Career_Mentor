@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 # 1. Setup
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 st.title("🗺️ AI Learning Roadmap")
 st.write("Generate a personalized study plan to reach your career goals.")

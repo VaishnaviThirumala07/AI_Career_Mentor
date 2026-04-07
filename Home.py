@@ -146,7 +146,7 @@ with col1:
 
     # Metrics Section
     m1, m2, m3 = st.columns(3)
-    m1.metric("System Status", "Online", "Gemini-1.5-Flash")
+    m1.metric("System Status", "Online", "Gemini-2.5-Flash")
     m2.metric("Resume Parser", "Active", "PDF/Text Support")
     m3.metric("Interview Engine", "Ready", "Context Aware")
 

@@ -8,7 +8,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Using 1.5 Pro for significantly better reasoning and rule-following
-MODEL_NAME = 'gemini-1.5-pro' 
+MODEL_NAME = 'gemini-2.5-pro' 
 
 st.title("🤖 AI Mock Interviewer")
 
