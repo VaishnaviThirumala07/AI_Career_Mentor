@@ -8,8 +8,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Use the model you found successfully in your test_brain.py
-# If this preview model fails, switch to 'gemini-1.5-flash'
-MODEL_NAME = 'gemini-2.5-flash-lite-preview-09-2025' 
+MODEL_NAME = 'gemini-1.5-flash' 
 model = genai.GenerativeModel(MODEL_NAME)
 
 st.title("🤖 AI Mock Interviewer")
@@ -42,9 +41,12 @@ with st.sidebar:
         
         Start by introducing yourself and asking the first question.
         """
-        # Send first message to AI to kickstart the chat
-        response = model.generate_content(initial_prompt)
-        st.session_state.messages.append({"role": "assistant", "content": response.text})
+        try:
+            # Send first message to AI to kickstart the chat
+            response = model.generate_content(initial_prompt)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+        except Exception as e:
+            st.error(f"Error starting interview: {e}")
 
 # 4. Display Chat History
 for message in st.session_state.messages:
@@ -64,7 +66,7 @@ if user_answer := st.chat_input("Type your answer here..."):
             # Construct the full chat history for context
             # We join previous messages so the AI knows what's going on
             chat_history = [
-                {"role": "user" if msg["role"] == "user" else "model", "parts": msg["content"]}
+                {"role": "user" if msg["role"] == "user" else "model", "parts": [msg["content"]]}
                 for msg in st.session_state.messages
             ]
             
