@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Using 1.5 Pro for significantly better reasoning and rule-following
-MODEL_NAME = 'gemini-2.5-pro' 
+# Using 2.5 Flash for high performance and higher quota limits
+MODEL_NAME = 'gemini-2.5-flash' 
 
 st.title("🤖 AI Mock Interviewer")
 
